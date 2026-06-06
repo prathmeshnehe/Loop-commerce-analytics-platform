@@ -27,8 +27,28 @@ The platform Transforms raw customer, order , product and marketing data into bu
 - Retention Rate
 - Repeat Purchase Rate
 - Product Performance
+  
+# Loop Commerce Analytics Platform
+
+> A production-grade DTC retention and ad spend 
+> intelligence platform built with Snowflake, dbt, 
+> Python, and GitHub Actions CI/CD.
+
+## The Business Problem
+
+DTC brands like Loop Earplugs spend tens of millions
+on customer acquisition annually. The critical 
+unanswered question is:
+
+**Which customers actually come back — and which 
+channels bring them?**
+
+This platform answers that question end-to-end using
+real e-commerce data modeled through a modern 
+analytics stack.
 
 ## Architecture
+<img width="922" height="283" alt="image" src="https://github.com/user-attachments/assets/2bcdd338-73ab-4602-8c7e-d8d5ac6ca999" />
 
 ## Data models
 
