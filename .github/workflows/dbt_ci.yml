@@ -1,0 +1,74 @@
+name: dbt CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# WHY: This tells GitHub WHEN to run this pipeline.
+# Every push to main branch triggers it automatically.
+
+jobs:
+  dbt-test:
+    runs-on: ubuntu-latest
+    # WHY: GitHub spins up a fresh Linux machine
+    # to run your code. Clean environment every time.
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        # WHY: Downloads your repo code onto
+        # GitHub's virtual machine so it can run it
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+        # WHY: GitHub's machine needs Python installed
+        # before it can install dbt
+
+      - name: Install dbt
+        run: pip install dbt-snowflake
+        # WHY: Installs dbt with Snowflake adapter
+        # on the virtual machine
+
+      - name: Create dbt profiles.yml
+        run: |
+          mkdir -p ~/.dbt
+          cat > ~/.dbt/profiles.yml << EOF
+          loop_analytics:
+            target: dev
+            outputs:
+              dev:
+                type: snowflake
+                account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+                user: ${{ secrets.SNOWFLAKE_USER }}
+                password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+                role: ACCOUNTADMIN
+                warehouse: LOOP_WH
+                database: LOOP_DB
+                schema: STAGING
+                threads: 4
+          EOF
+        # WHY: The virtual machine doesn't have your
+        # profiles.yml so we create it on the fly
+        # using secrets stored safely in GitHub
+
+      - name: Run dbt debug
+        working-directory: dbt_project
+        run: dbt debug
+        # WHY: Verifies connection to Snowflake works
+        # before attempting to run models
+
+      - name: Run dbt models
+        working-directory: dbt_project
+        run: dbt run
+        # WHY: Builds all your models in Snowflake
+
+      - name: Run dbt tests
+        working-directory: dbt_project
+        run: dbt test
+        # WHY: Runs all your data quality tests.
+        # If any fail, the pipeline fails and GitHub
+        # shows a red X on your commit

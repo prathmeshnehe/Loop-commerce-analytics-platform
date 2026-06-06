@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: mart_repeat_purchase_rate
+    description: "Retention rate by market — Loop's core business problem"
+    columns:
+      - name: state
+        tests:
+          - not_null
+      - name: repeat_rate_pct
+        tests:
+          - not_null
+
+  - name: mart_channel_ltv
+    description: "Revenue and ROAS by acquisition channel and market"
+    columns:
+      - name: channel
+        tests:
+          - not_null
+      - name: overall_roas
+        tests:
+          - not_null
+
+  - name: mart_cohort_retention
+    description: "Monthly cohort retention — how many customers return each month"
+    columns:
+      - name: cohort_month
+        tests:
+          - not_null
+
+  - name: mart_market_performance
+    description: "Revenue and order metrics by market and month"
+    columns:
+      - name: market
+        tests:
+          - not_null
+      - name: total_revenue
+        tests:
+          - not_null

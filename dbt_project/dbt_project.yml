@@ -1,0 +1,21 @@
+name: 'loop_analytics'
+version: '1.0.0'
+config-version: 2
+
+profile: 'loop_analytics'
+
+model-paths: ["models"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+
+models:
+  loop_analytics:
+    staging:
+      +materialized: view
+      +schema: STAGING
+    intermediate:
+      +materialized: view
+      +schema: STAGING
+    marts:
+      +materialized: table
+      +schema: MARTS

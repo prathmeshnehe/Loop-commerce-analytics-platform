@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: raw
+    database: LOOP_DB
+    schema: RAW
+    tables:
+      - name: RAW_CUSTOMERS
+      - name: RAW_ORDERS
+      - name: RAW_ORDER_ITEMS
+      - name: RAW_ORDER_PAYMENTS
+      - name: RAW_PRODUCTS
+      - name: RAW_AD_SPEND

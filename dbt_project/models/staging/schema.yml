@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Cleaned customer records from Olist"
+    columns:
+      - name: customer_id
+        description: "Unique identifier per order"
+        tests:
+          - not_null
+          - unique
+      - name: city
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: "Cleaned non-canceled orders"
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique
+      - name: status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['delivered', 'shipped', 'processing',
+                      'invoiced', 'approved', 'unavailable','canceled','created']
+
+  - name: stg_order_items
+    description: "Individual items within each order"
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+      - name: item_price
+        tests:
+          - not_null
+
+  - name: stg_ad_spend
+    description: "Daily ad spend by channel and market"
+    columns:
+      - name: spend_date
+        tests:
+          - not_null
+      - name: channel
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['paid_social', 'organic', 'referral',
+                      'tiktok', 'email']
