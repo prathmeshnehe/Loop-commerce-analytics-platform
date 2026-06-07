@@ -52,13 +52,16 @@ if page == "Retention Overview":
     # Load data from Snowflake mart
     df = run_query("""
         SELECT
-            state,
-            total_customers,
-            repeat_customers,
-            repeat_rate_pct,
-            avg_lifetime_value
-        FROM LOOP_DB.MARTS.MART_REPEAT_PURCHASE_RATE
-        ORDER BY repeat_rate_pct DESC
+            market,
+            month,
+            total_orders,
+            unique_customers,
+            total_revenue,
+            avg_order_value
+        FROM LOOP_DB.MARTS.MART_MARKET_PERFORMANCE
+        WHERE month < DATE_TRUNC('month', MAX(month) 
+          OVER ())
+         ORDER BY month, total_revenue DESC
     """)
 
     # KPI Cards at the top
@@ -67,18 +70,18 @@ if page == "Retention Overview":
     # multiple elements side by side like a grid
 
     with col1:
-        total = df['total_customers'].sum()
+        total = df['unique_customers'].sum()
         st.metric("Total Customers", f"{total:,}")
         # WHY :, format: Adds comma separators
         # so 99000 shows as 99,000
 
     with col2:
-        repeat = df['repeat_customers'].sum()
+        repeat = df['unique_customers'].sum() - df['unique_customers'].min()
         st.metric("Repeat Customers", f"{repeat:,}")
 
     with col3:
-        avg_rate = df['repeat_rate_pct'].mean().round(2)
-        st.metric("Avg Repeat Rate", f"{avg_rate}%")
+        avg_rate = df['avg_order_value'].mean().round(2)
+        st.metric("Avg Order Value", f"${avg_rate}")
 
     st.markdown("---")
 
