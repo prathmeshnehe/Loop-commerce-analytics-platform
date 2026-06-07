@@ -238,16 +238,20 @@ elif page == "Market Performance":
     )
 
     df = run_query("""
-        SELECT
-            market,
-            month,
-            total_orders,
-            unique_customers,
-            total_revenue,
-            avg_order_value
+    SELECT
+        market,
+        month,
+        total_orders,
+        unique_customers,
+        total_revenue,
+        avg_order_value
+    FROM LOOP_DB.MARTS.MART_MARKET_PERFORMANCE
+    WHERE month < (
+        SELECT MAX(month)
         FROM LOOP_DB.MARTS.MART_MARKET_PERFORMANCE
-        ORDER BY month, total_revenue DESC
-    """)
+    )
+    ORDER BY month, total_revenue DESC
+""")
 
     df['month'] = df['month'].astype(str)
 
