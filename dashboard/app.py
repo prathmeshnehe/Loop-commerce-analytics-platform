@@ -59,8 +59,9 @@ if page == "Retention Overview":
             total_revenue,
             avg_order_value
         FROM LOOP_DB.MARTS.MART_MARKET_PERFORMANCE
-        WHERE month < DATE_TRUNC('month', MAX(month) 
-          OVER ())
+            WHERE month < (
+                SELECT MAX(month) FROM LOOP_DB.MARTS.MART_MARKET_PERFORMANCE
+            )
          ORDER BY month, total_revenue DESC
     """)
 
